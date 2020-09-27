@@ -35,6 +35,10 @@ cd("..")
 
 cd("modelling")
 @testset "Modelling Examples" begin
+    include("modelling/geographic_clustering.jl")
+    @test JuMP.termination_status(model) == MOI.OPTIMAL
+    @test objective_value(model) ≈ 38460.224
+
     include("modelling/n-queens.jl")
     @test sum([sum(value.(x)[i, :]) == 1 for i=1:N]) == N
     @test sum([sum(value.(x)[:, i]) == 1 for i=1:N]) == N
@@ -113,8 +117,7 @@ cd("modelling")
     @test objective_value(rocket) ≈ 1.0128340648308058
     include("modelling/logistic_regression.jl")
     @test JuMP.termination_status(model) == MOI.OPTIMAL
-    @test JuMP.objective_value(model) ≈ 841.6779472247331
     @test JuMP.termination_status(sparse_model) == MOI.OPTIMAL
-    @test JuMP.objective_value(sparse_model) ≈ 956.4575122281545
+    include("modelling/facility_location.jl")
 end
 cd("..")
